@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Security.Cryptography;
 
+
 public static class Program
 {
     public static void Main(string[] args)
@@ -15,13 +16,22 @@ public static class Program
                 .AddChoices(new[] {
                     "Log in to account",
                     "Create new account",
-                    "Informations about project",
+                    "Information about project",
                 }));
+
+    // sprobuje to na case'ach zrobić zamiast if - Mikołaj
+    // chociaz tak tez jest ok
         if (options == "Log in to account")
         {
             Login();
         }
+        else if (options == "Create new account")
+        {
+            CreateAccount();
+        }
     }
+
+
 
     public static void Login()
     {
@@ -34,7 +44,9 @@ public static class Program
         {
             if (item.uid == uid && item.password == password) {
               AnsiConsole.WriteLine("Logged in!");
-              ShowAccountDetails();
+              ShowAccountDetails(item);
+              
+              
               return;
             }
         }
@@ -44,11 +56,26 @@ public static class Program
         return;
     }
 
-    public static void ShowAccountDetails() {
+//void na tworzenie konta - M
+    public static void CreateAccount()
+    {
+    
+    }
+
+  // Zacząłem też to, póki co po zalogowaniu pokazuje tylko first last name. - M
+    public static void ShowAccountDetails(AccountJSON account)
+    {
       AnsiConsole.WriteLine("Press Enter.");
       Console.ReadKey();
+      
+      AnsiConsole.WriteLine($"Imię i Nazwisko: {account.FirstName} + {account.LastName}");
+      
+      
+      
       // Trzeba dodac do tego pliku json, jakies pola typu saldo konta etc. 
+      // Plus listę opcji z których dalej można wybierać, czyli poza info np mamy Listę opcji wyloguj, zrób przelew etc etc. - M
     }
+
 
     static string SHA256Encrypt(string password)
     {
@@ -77,5 +104,18 @@ public class AccountsJSON
 public class AccountJSON {
   public string uid { get; set; } = string.Empty;
   public string password { get; set; } = string.Empty;
+
+//Nowe stringi z DateOfBirth będę bawił się poźniej
+  public string FirstName { get; set; } = string.Empty;
+  public string LastName { get; set; } = string.Empty;
+
+  //public int DateOfBirth { get; set; } = 0;
 }
 
+
+/* Login info
+
+1.123456 - abc
+2.789012 - cba
+3.111222333 - InneHaslo
+*/ 

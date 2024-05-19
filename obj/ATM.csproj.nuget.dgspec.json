@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj": {}
+    "C:\\Users\\mieey\\OneDrive\\Pulpit\\ProgClassProj\\ATM\\ATM.csproj": {}
   },
   "projects": {
-    "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj": {
+    "C:\\Users\\mieey\\OneDrive\\Pulpit\\ProgClassProj\\ATM\\ATM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj",
+        "projectUniqueName": "C:\\Users\\mieey\\OneDrive\\Pulpit\\ProgClassProj\\ATM\\ATM.csproj",
         "projectName": "ATM",
-        "projectPath": "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj",
-        "packagesPath": "/home/alosuri/.nuget/packages/",
-        "outputPath": "/home/alosuri/Documents/Programming/C#/ATM/obj/",
+        "projectPath": "C:\\Users\\mieey\\OneDrive\\Pulpit\\ProgClassProj\\ATM\\ATM.csproj",
+        "packagesPath": "C:\\Users\\mieey\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mieey\\OneDrive\\Pulpit\\ProgClassProj\\ATM\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/alosuri/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\mieey\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -63,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

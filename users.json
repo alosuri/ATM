@@ -2,7 +2,10 @@
  "accounts": [
     {
       "uid": "123456",
-      "password": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+      "password": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+      "FirstName": "Yo",
+      "LastName":"Mama"
+      
     },
 
     {
@@ -13,6 +16,11 @@
     {
       "uid": "111222333",
       "password": "70b1a926c5c67829bc381be40648a7527d8643c043c50640da7782200ad29439" 
+    },
+
+    {
+      "uid": "M1234",
+       "password": "88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589" 
     }
  ]
 }
