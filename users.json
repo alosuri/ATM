@@ -1,27 +1,53 @@
 {
- "accounts": [
+  "accounts": [
     {
       "uid": "123456",
       "password": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
       "FirstName": "Yo",
-      "LastName":"Mama"
-      
+      "LastName": "Mama",
+      "DateOfBirth": "0001-01-01T00:00:00"
     },
-
     {
       "uid": "789012",
-      "password": "96e31900cc68fc888c1780af22244926f630f384f956d03c71d042eedea86127"
+      "password": "96e31900cc68fc888c1780af22244926f630f384f956d03c71d042eedea86127",
+      "FirstName": "",
+      "LastName": "",
+      "DateOfBirth": "0001-01-01T00:00:00"
     },
-
     {
       "uid": "111222333",
-      "password": "70b1a926c5c67829bc381be40648a7527d8643c043c50640da7782200ad29439" 
+      "password": "70b1a926c5c67829bc381be40648a7527d8643c043c50640da7782200ad29439",
+      "FirstName": "",
+      "LastName": "",
+      "DateOfBirth": "0001-01-01T00:00:00"
     },
-
     {
       "uid": "M1234",
-       "password": "88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589" 
+      "password": "88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589",
+      "FirstName": "",
+      "LastName": "",
+      "DateOfBirth": "0001-01-01T00:00:00"
+    },
+    {
+      "uid": "M1234",
+      "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "FirstName": "Miko\u0142aj",
+      "LastName": "Szymanowicz",
+      "DateOfBirth": "2003-01-31T00:00:00"
+    },
+    {
+      "uid": "12345678",
+      "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "FirstName": "k",
+      "LastName": "k",
+      "DateOfBirth": "2003-01-31T00:00:00"
+    },
+    {
+      "uid": "m1234",
+      "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "FirstName": "M",
+      "LastName": "K",
+      "DateOfBirth": "31-01-2003"
     }
- ]
+  ]
 }
-

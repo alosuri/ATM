@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Security.Cryptography;
+using System.Globalization;
 
 
 public static class Program
@@ -25,7 +26,7 @@ public static class Program
         {
             Login();
         }
-        else if (options == "Create new account")
+        if (options == "Create new account")
         {
             CreateAccount();
         }
@@ -57,18 +58,68 @@ public static class Program
     }
 
 //void na tworzenie konta - M
+//trzeba zrobić zasadę bo jak są 2 takie same id to nadpisuje. 
     public static void CreateAccount()
     {
-    
-    }
 
-  // Zacząłem też to, póki co po zalogowaniu pokazuje tylko first last name. - M
+      AnsiConsole.WriteLine("Welcome! Please enter the information to create account with us");
+      AnsiConsole.WriteLine("Upon entry of each required information, please click Enter");
+      
+      AnsiConsole.WriteLine("Create User ID");
+      var uid = AnsiConsole.Ask<string>("Enter [green]uid[/]:");
+      
+
+      AnsiConsole.WriteLine("Create password");
+      var password = SHA256Encrypt(AnsiConsole.Prompt(new TextPrompt<string>("Enter [green]password[/]?") .PromptStyle("red").Secret('*')));
+    
+
+      AnsiConsole.WriteLine("Please provide us with your first, last name and date of birth.");
+
+      var firstName = AnsiConsole.Ask<string>("Enter [green]first name[/]:");
+      var lastName = AnsiConsole.Ask<string>("Enter [green]last name[/]:");
+
+//naming sucks ;)
+        var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
+        var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+        string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
+
+
+      //var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
+      //var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+      //string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
+     // Kod trzeba poprawić bo date of birth przy formacie 01-01-03 wyrzuca exception, póki co tylko godzine poprawiam.
+
+    // godzina naprawiona, nie testowałem exceptions - na nowych kontach będzie się wyświetlać ok.
+
+      AnsiConsole.WriteLine("Press enter to continue.");
+      Console.ReadKey();
+
+        string jsonData = File.ReadAllText("users.json");
+        AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
+
+        // Dodajemy nowe konto do listy, 
+        ob.accounts = ob.accounts.Append(new AccountJSON { uid = uid, password = password, FirstName = firstName, LastName = lastName, DateOfBirth = birthDateOnly }).ToArray();
+      
+      //Nie zmienia .jsona w jedna linie yipiee!!!
+      var options = new JsonSerializerOptions
+      { 
+        WriteIndented = true
+      };
+
+      File.WriteAllText("users.json", JsonSerializer.Serialize(ob, options));
+      }
+    
+
     public static void ShowAccountDetails(AccountJSON account)
     {
       AnsiConsole.WriteLine("Press Enter.");
       Console.ReadKey();
-      
-      AnsiConsole.WriteLine($"Imię i Nazwisko: {account.FirstName} + {account.LastName}");
+    
+    // Wyświetla informacje o koncie, po tym można pokazać listę opcji.
+      AnsiConsole.WriteLine($"UserID: {account.uid}");
+      AnsiConsole.WriteLine($"Imię: {account.FirstName}");
+      AnsiConsole.WriteLine($"Nazwisko: {account.LastName}");
+      AnsiConsole.WriteLine($"Data urodzenia: {account.DateOfBirth}");
       
       
       
@@ -109,13 +160,13 @@ public class AccountJSON {
   public string FirstName { get; set; } = string.Empty;
   public string LastName { get; set; } = string.Empty;
 
-  //public int DateOfBirth { get; set; } = 0;
+  public string DateOfBirth { get; set; } = string.Empty;
 }
 
 
 /* Login info
 
 1.123456 - abc
-2.789012 - cba
+2.789012 - cba - ten nie działa
 3.111222333 - InneHaslo
 */ 
