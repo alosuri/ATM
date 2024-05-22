@@ -3,35 +3,80 @@ using System.Text;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Globalization;
-
+using System.Text.Json.Serialization;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 public static class Program
 {
+    private static AccountJSON? loggedInUser = null;
     public static void Main(string[] args)
     {
+      while (true)
+      {
+        if (loggedInUser == null)
+        {
+          ShowMainMenu();
+        }
+        else
+        {
+          ShowLoggedInMenu();
+        }
+      }
+    }
+      public static void ShowMainMenu()
+      {
         var options =  AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("What would you like to do?")
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to choose an option.)[/]")
-                .AddChoices(new[] {
+                .AddChoices(new[] 
+                {
                     "Log in to account",
                     "Create new account",
                     "Information about project",
                 }));
+    switch(options)
+    {
+      case "Log in to account":
+        Login();
+        break;
+      case "Create new account":
+        CreateAccount();
+        break;
+      case "Information about project":
+        AnsiConsole.WriteLine("");
+        break;
+    }
+    }
+        public static void ShowLoggedInMenu()
+    {
+        var options = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title($"Welcome {loggedInUser.FirstName}, what would you like to do?")
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to choose an option.)[/]")
+                .AddChoices(new[] {
+                    "Deposit money",
+                    "Withdraw money",
+                    "Log out",
+                }));
 
-    // sprobuje to na case'ach zrobić zamiast if - Mikołaj
-    // chociaz tak tez jest ok
-        if (options == "Log in to account")
+        switch (options)
         {
-            Login();
-        }
-        if (options == "Create new account")
-        {
-            CreateAccount();
+            case "Deposit money":
+                Deposit();
+                break;
+            case "Withdraw money":
+                Withdraw();
+                break;
+            case "Log out":
+                LogOut();
+                break;
         }
     }
-
 
 
     public static void Login()
@@ -43,18 +88,31 @@ public static class Program
 
         foreach (var item in ob.accounts)
         {
-            if (item.uid == uid && item.password == password) {
+            if (item.uid == uid && item.password == password) 
+            {
               AnsiConsole.WriteLine("Logged in!");
+              loggedInUser = item;
               ShowAccountDetails(item);
-              
-              
               return;
+
             }
         }
 
         Console.WriteLine("Password or UID are incorrect.");
         // Zamiast return mozemy tutaj dac zapetlenie sie funkcji login, zeby mozna powtorzyc logowanie.
         return;
+    }
+    public static void LogOut()
+    {
+        if (loggedInUser != null)
+        {
+            AnsiConsole.WriteLine($"User {loggedInUser.uid} logged out.");
+            loggedInUser = null;
+        }
+        else
+        {
+            AnsiConsole.WriteLine("No user is currently logged in.");
+        }
     }
 
 //void na tworzenie konta - M
@@ -82,8 +140,9 @@ public static class Program
         var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
         var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
         string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
-
-
+        
+        var balance = AnsiConsole.Ask<decimal>("Enter [green]initial balance[/]:");
+        var creationDate = DateTime.Now;
       //var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
       //var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
       //string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
@@ -98,7 +157,8 @@ public static class Program
         AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
         // Dodajemy nowe konto do listy, 
-        ob.accounts = ob.accounts.Append(new AccountJSON { uid = uid, password = password, FirstName = firstName, LastName = lastName, DateOfBirth = birthDateOnly }).ToArray();
+        ob.accounts = ob.accounts.Append(new AccountJSON { uid = uid, password = password, FirstName = firstName, LastName = lastName, DateOfBirth = birthDateOnly, Balance = balance, 
+        CreationDate = creationDate}).ToArray();
       
       //Nie zmienia .jsona w jedna linie yipiee!!!
       var options = new JsonSerializerOptions
@@ -120,13 +180,60 @@ public static class Program
       AnsiConsole.WriteLine($"Imię: {account.FirstName}");
       AnsiConsole.WriteLine($"Nazwisko: {account.LastName}");
       AnsiConsole.WriteLine($"Data urodzenia: {account.DateOfBirth}");
-      
-      
+      AnsiConsole.WriteLine($"Saldo konta: {account.Balance}");
+      AnsiConsole.WriteLine($"Data utworzenia konta: {account.CreationDate}");
       
       // Trzeba dodac do tego pliku json, jakies pola typu saldo konta etc. 
       // Plus listę opcji z których dalej można wybierać, czyli poza info np mamy Listę opcji wyloguj, zrób przelew etc etc. - M
     }
+  public static void Deposit()
+    {
+        if (loggedInUser != null)
+        {
+            decimal amount = AnsiConsole.Ask<decimal>("Enter amount to deposit:");
+            loggedInUser.Balance += amount;
 
+            UpdateUserInJson(loggedInUser);
+
+            AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+        }
+    }
+  public static void Withdraw()
+    {
+        if (loggedInUser != null)
+        {
+            decimal amount = AnsiConsole.Ask<decimal>("Enter amount to withdraw:");
+            if (amount <= loggedInUser.Balance)
+            {
+                loggedInUser.Balance -= amount;
+
+                UpdateUserInJson(loggedInUser);
+
+                AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+            }
+            else
+            {
+                AnsiConsole.WriteLine("Insufficient funds.");
+            }
+        }
+    }
+    public static void UpdateUserInJson(AccountJSON updatedAccount)
+    {
+        string jsonData = File.ReadAllText("users.json");
+        AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
+
+        for (int i = 0; i < ob.accounts.Length; i++)
+        {
+            if (ob.accounts[i].uid == updatedAccount.uid)
+            {
+                ob.accounts[i] = updatedAccount;
+                break;
+            }
+        }
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText("users.json", JsonSerializer.Serialize(ob, options));
+    }
 
     static string SHA256Encrypt(string password)
     {
@@ -148,7 +255,7 @@ public static class Program
 // Wczytanie tabeli Accounts z JSON
 public class AccountsJSON
 {
-  public AccountJSON[] accounts { get; set; } = [];  
+  public AccountJSON[] accounts { get; set; } = Array.Empty<AccountJSON>();  
 }
 
 // Wczytanie pol uid i password z JSON
@@ -161,7 +268,12 @@ public class AccountJSON {
   public string LastName { get; set; } = string.Empty;
 
   public string DateOfBirth { get; set; } = string.Empty;
+  public decimal Balance { get; set; }
+  public DateTime CreationDate { get; set; }
+
+  public AccountJSON() { }
 }
+
 
 
 /* Login info
