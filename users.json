@@ -71,6 +71,33 @@
       "DateOfBirth": "03-07-2003",
       "Balance": 9,
       "CreationDate": "2024-05-22T12:56:59.6133394+02:00"
+    },
+    {
+      "uid": "RS1234",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "FirstName": "Rafa\u0142",
+      "LastName": "Such",
+      "DateOfBirth": "12-12-1212",
+      "Balance": 707.000,
+      "CreationDate": "2024-05-22T14:28:16.7375407+02:00"
+    },
+    {
+      "uid": "ds51215",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "FirstName": "dsdsg",
+      "LastName": "sdgds",
+      "DateOfBirth": "12-12-1222",
+      "Balance": 100,
+      "CreationDate": "2024-05-22T18:47:19.1487739+02:00"
+    },
+    {
+      "uid": "SC80189",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "FirstName": "Siema",
+      "LastName": "Czesc",
+      "DateOfBirth": "12-12-1212",
+      "Balance": 100,
+      "CreationDate": "2024-05-22T18:51:19.6189839+02:00"
     }
   ]
 }
