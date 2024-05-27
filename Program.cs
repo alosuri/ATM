@@ -15,22 +15,22 @@ public static class Program
     {
       if (loggedInUser == null)
       {
-		Console.Clear();
+        Console.Clear();
         ShowMainMenu();
       }
       else
       {
-		Console.Clear();
+        Console.Clear();
         ShowLoggedInMenu();
       }
     }
   }
   public static void ShowMainMenu()
   {
-	var panel = new Panel("Tutaj trzeba dac jakis tekst na powitanie, ale na chwile obecna nie mam pomyslu.");
-	panel.Border = BoxBorder.Rounded;
-	panel.Padding = new Padding(1, 1, 1, 1);
-	AnsiConsole.Write(panel);
+    var panel = new Panel("Tutaj trzeba dac jakis tekst na powitanie, ale na chwile obecna nie mam pomyslu.");
+    panel.Border = BoxBorder.Rounded;
+    panel.Padding = new Padding(1, 1, 1, 1);
+    AnsiConsole.Write(panel);
 
     var options = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
@@ -46,11 +46,11 @@ public static class Program
     switch (options)
     {
       case "Log in to account":
-		Console.Clear();
+        Console.Clear();
         Login();
         break;
       case "Create new account":
-		Console.Clear();
+        Console.Clear();
         CreateAccount();
         break;
       case "Information about project":
@@ -60,15 +60,15 @@ public static class Program
   }
   public static void ShowLoggedInMenu()
   {
-	Console.Clear();
+    Console.Clear();
 
-		
-	var panel = new Panel($"[springgreen3_1]Name:[/] {loggedInUser?.FirstName + ' ' + loggedInUser?.LastName}\n[springgreen2]UID:[/] {loggedInUser?.uid}\n[cyan3]Birth date:[/] {loggedInUser?.DateOfBirth}\n[darkturquoise]Account created on:[/] {loggedInUser?.CreationDate}\n\n[turquoise2]Account balance:[/] {loggedInUser?.Balance} ZŁ");
-	panel.Header = new PanelHeader("[green3_1] Account details [/]");
-	panel.Border = BoxBorder.Rounded;
-	panel.Padding = new Padding(2, 2, 2, 2);
-	
-	AnsiConsole.Write(panel);
+
+    var panel = new Panel($"[springgreen3_1]Name:[/] {loggedInUser?.FirstName + ' ' + loggedInUser?.LastName}\n[springgreen2]UID:[/] {loggedInUser?.Uid}\n[cyan3]Birth date:[/] {loggedInUser?.DateOfBirth}\n[darkturquoise]Account created on:[/] {loggedInUser?.CreationDate}\n\n[turquoise2]Account balance:[/] {loggedInUser?.Balance} ZŁ");
+    panel.Header = new PanelHeader("[green3_1] Account details [/]");
+    panel.Border = BoxBorder.Rounded;
+    panel.Padding = new Padding(2, 2, 2, 2);
+
+    AnsiConsole.Write(panel);
     var options = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
             .Title($"\nWelcome {loggedInUser?.FirstName}, what would you like to do?")
@@ -77,6 +77,7 @@ public static class Program
             .AddChoices(new[] {
                     "Deposit money",
                     "Withdraw money",
+          "Transfer money",
                     "Log out",
             }));
 
@@ -88,6 +89,9 @@ public static class Program
       case "Withdraw money":
         Withdraw();
         break;
+      case "Transfer money":
+        Transfer();
+        break;
       case "Log out":
         LogOut();
         break;
@@ -97,11 +101,11 @@ public static class Program
 
   public static void Login()
   {
-	var panel = new Panel("Please enter your [green]User ID[/] and [green]password[/] to access your account.");
-	panel.Border = BoxBorder.Rounded;
-	panel.Padding = new Padding(1, 1, 1, 1);
-	AnsiConsole.Write(panel);
-	Console.Write("\n");
+    var panel = new Panel("Please enter your [green]User ID[/] and [green]password[/] to access your account.");
+    panel.Border = BoxBorder.Rounded;
+    panel.Padding = new Padding(1, 1, 1, 1);
+    AnsiConsole.Write(panel);
+    Console.Write("\n");
 
     var uid = AnsiConsole.Ask<string>("Enter [green]user ID[/]:");
     var password = SHA256Encrypt(AnsiConsole.Prompt(new TextPrompt<string>("Enter [green]password[/]?").PromptStyle("red").Secret('*')));
@@ -110,7 +114,7 @@ public static class Program
 
     foreach (var item in ob.accounts)
     {
-      if (item.uid == uid && item.password == password)
+      if (item.Uid == uid && item.Password == password)
       {
         AnsiConsole.WriteLine("Logged in!");
         loggedInUser = item;
@@ -127,9 +131,9 @@ public static class Program
   {
     if (loggedInUser != null)
     {
-		Console.Clear();
-      	AnsiConsole.WriteLine($"User {loggedInUser.uid} logged out.");
-      	loggedInUser = null;
+      Console.Clear();
+      AnsiConsole.WriteLine($"User {loggedInUser.Uid} logged out.");
+      loggedInUser = null;
     }
     else
     {
@@ -140,15 +144,15 @@ public static class Program
   //void na tworzenie konta - M
   //trzeba zrobić zasadę bo jak są 2 takie same id to nadpisuje. 
   public static void CreateAccount()
-  {  
+  {
     string jsonData = File.ReadAllText("users.json");
     AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
-	var panel = new Panel("Welcome! Please enter the information to create account with us.\nUpon entry of each required information, please click Enter.\nPlease provide us with your first, last name and date of birth.");
-	panel.Border = BoxBorder.Rounded;
-	panel.Padding = new Padding(1, 1, 1, 1);
-	AnsiConsole.Write(panel);
-	Console.Write("\n");
+    var panel = new Panel("Welcome! Please enter the information to create account with us.\nUpon entry of each required information, please click Enter.\nPlease provide us with your first, last name and date of birth.");
+    panel.Border = BoxBorder.Rounded;
+    panel.Padding = new Padding(1, 1, 1, 1);
+    AnsiConsole.Write(panel);
+    Console.Write("\n");
 
 
     var firstName = AnsiConsole.Ask<string>("Enter [green]first name[/]:");
@@ -161,7 +165,7 @@ public static class Program
 
     var balance = AnsiConsole.Ask<decimal>("Enter [green]initial balance[/]:");
     var creationDate = DateTime.Now;
-    
+
     var password = SHA256Encrypt(AnsiConsole.Prompt(new TextPrompt<string>("Enter [green]password[/]:").PromptStyle("red").Secret('*')));
 
 
@@ -172,23 +176,23 @@ public static class Program
 
     // godzina naprawiona, nie testowałem exceptions - na nowych kontach będzie się wyświetlać ok.
 
-	Random code = new();
+    Random code = new();
     string uid = Convert.ToString(firstName[0]) + Convert.ToString(lastName[0]) + Convert.ToString(code.Next(10000, 99999));
 
-	Console.Clear();
+    Console.Clear();
 
-	var panel2 = new Panel($"Your user ID: {uid}");
-	panel2.Border = BoxBorder.Rounded;
-	panel2.Padding = new Padding(1, 1, 1, 1);
-	AnsiConsole.Write(panel2);
+    var panel2 = new Panel($"Your user ID: {uid}");
+    panel2.Border = BoxBorder.Rounded;
+    panel2.Padding = new Padding(1, 1, 1, 1);
+    AnsiConsole.Write(panel2);
 
-      foreach (var item in ob.accounts)
+    foreach (var item in ob.accounts)
+    {
+      if (item.Uid == uid)
       {
-        if (item.uid == uid)
-        {
-          uid = Convert.ToString(firstName[0]) + Convert.ToString(lastName[0]) + Convert.ToString(code.Next(10000, 99999));
-        }
-      }      
+        uid = Convert.ToString(firstName[0]) + Convert.ToString(lastName[0]) + Convert.ToString(code.Next(10000, 99999));
+      }
+    }
 
 
     AnsiConsole.WriteLine("\nPress enter to continue.");
@@ -197,8 +201,8 @@ public static class Program
     // Dodajemy nowe konto do listy, 
     ob.accounts = ob.accounts.Append(new AccountJSON
     {
-      uid = uid,
-      password = password,
+      Uid = uid,
+      Password = password,
       FirstName = firstName,
       LastName = lastName,
       DateOfBirth = birthDateOnly,
@@ -224,6 +228,7 @@ public static class Program
 
       UpdateUserInJson(loggedInUser);
 
+      // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
       AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
     }
   }
@@ -238,6 +243,7 @@ public static class Program
 
         UpdateUserInJson(loggedInUser);
 
+        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
         AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
       }
       else
@@ -246,6 +252,41 @@ public static class Program
       }
     }
   }
+
+  public static void Transfer()
+  {
+    if (loggedInUser != null)
+    {
+      string uid = AnsiConsole.Ask<string>("\nEnter the recipient's UID:");
+      decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to transfer:");
+      if (amount <= loggedInUser.Balance)
+      {
+        string jsonData = File.ReadAllText("users.json");
+        AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
+
+        foreach (var item in ob.accounts)
+        {
+          if (item.Uid == uid)
+          {
+            item.Balance += amount;
+            loggedInUser.Balance -= amount;
+
+            UpdateUserInJson(loggedInUser);
+            UpdateUserInJson(item);
+
+            break;
+          }
+        }
+        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
+        AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+      }
+      else
+      {
+        AnsiConsole.WriteLine("Insufficient funds.");
+      }
+    }
+  }
+
   public static void UpdateUserInJson(AccountJSON updatedAccount)
   {
     string jsonData = File.ReadAllText("users.json");
@@ -253,7 +294,7 @@ public static class Program
 
     for (int i = 0; i < ob.accounts.Length; i++)
     {
-      if (ob.accounts[i].uid == updatedAccount.uid)
+      if (ob.accounts[i].Uid == updatedAccount.Uid)
       {
         ob.accounts[i] = updatedAccount;
         break;
@@ -290,8 +331,8 @@ public class AccountsJSON
 // Wczytanie pol uid i password z JSON
 public class AccountJSON
 {
-  public string uid { get; set; } = string.Empty;
-  public string password { get; set; } = string.Empty;
+  public string Uid { get; set; } = string.Empty;
+  public string Password { get; set; } = string.Empty;
 
   //Nowe stringi z DateOfBirth będę bawił się poźniej
   public string FirstName { get; set; } = string.Empty;
@@ -303,12 +344,3 @@ public class AccountJSON
 
   public AccountJSON() { }
 }
-
-
-
-/* Login info
-
-1.123456 - abc
-2.789012 - cba - ten nie działa
-3.111222333 - InneHaslo
-*/

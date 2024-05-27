@@ -1,26 +1,26 @@
 {
   "accounts": [
     {
-      "uid": "JK22146",
-      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "Uid": "123",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Jan",
       "LastName": "Kowalski",
       "DateOfBirth": "12-03-2001",
-      "Balance": 230,
+      "Balance": 90,
       "CreationDate": "2024-05-22T18:57:12.5208528+02:00"
     },
     {
-      "uid": "MK29903",
-      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "Uid": "456",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Micha\u0142",
       "LastName": "Kot",
       "DateOfBirth": "03-08-2005",
-      "Balance": 100,
+      "Balance": 240,
       "CreationDate": "2024-05-22T18:57:43.5292557+02:00"
     },
     {
-      "uid": "AM23831",
-      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "Uid": "AM23831",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Artur",
       "LastName": "Michalski",
       "DateOfBirth": "05-10-1999",
@@ -28,8 +28,8 @@
       "CreationDate": "2024-05-22T18:58:58.0856077+02:00"
     },
     {
-      "uid": "WK96925",
-      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "Uid": "WK96925",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Wiktoria",
       "LastName": "Krzak",
       "DateOfBirth": "05-12-1998",
@@ -37,8 +37,8 @@
       "CreationDate": "2024-05-22T18:59:57.2579173+02:00"
     },
     {
-      "uid": "SB39416",
-      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "Uid": "SB39416",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Sandra",
       "LastName": "Bruk",
       "DateOfBirth": "19-08-2006",
