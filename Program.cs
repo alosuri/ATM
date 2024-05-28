@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Security.Cryptography;
 using System.Globalization;
 
+
 // ShowAccountsDetails - Przenioslem te funkcje do ShowLoggedInMenu. - Rafał
 
 public static class Program
@@ -14,7 +15,7 @@ public static class Program
     while (true)
     {
       if (loggedInUser == null)
-      {
+      { 
         Console.Clear();
         ShowMainMenu();
       }
@@ -77,7 +78,8 @@ public static class Program
             .AddChoices(new[] {
                     "Deposit money",
                     "Withdraw money",
-          "Transfer money",
+                    "Transfer money",
+                    "Transaction history",
                     "Log out",
             }));
 
@@ -91,6 +93,9 @@ public static class Program
         break;
       case "Transfer money":
         Transfer();
+        break;
+      case "Transaction history":
+        TransHistory();
         break;
       case "Log out":
         LogOut();
@@ -112,6 +117,7 @@ public static class Program
     string jsonData = File.ReadAllText("users.json");
     AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
+
     foreach (var item in ob.accounts)
     {
       if (item.Uid == uid && item.Password == password)
@@ -123,10 +129,14 @@ public static class Program
       }
     }
 
+
     Console.WriteLine("Password or UID are incorrect.");
+
     // Zamiast return mozemy tutaj dac zapetlenie sie funkcji login, zeby mozna powtorzyc logowanie.
     return;
   }
+
+  
   public static void LogOut()
   {
     if (loggedInUser != null)
@@ -139,10 +149,7 @@ public static class Program
     {
       AnsiConsole.WriteLine("No user is currently logged in.");
     }
-  }
-
-  //void na tworzenie konta - M
-  //trzeba zrobić zasadę bo jak są 2 takie same id to nadpisuje. 
+  } 
   public static void CreateAccount()
   {
     string jsonData = File.ReadAllText("users.json");
@@ -169,13 +176,6 @@ public static class Program
     var password = SHA256Encrypt(AnsiConsole.Prompt(new TextPrompt<string>("Enter [green]password[/]:").PromptStyle("red").Secret('*')));
 
 
-    //var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
-    //var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-    //string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
-    // Kod trzeba poprawić bo date of birth przy formacie 01-01-03 wyrzuca exception, póki co tylko godzine poprawiam.
-
-    // godzina naprawiona, nie testowałem exceptions - na nowych kontach będzie się wyświetlać ok.
-
     Random code = new();
     string uid = Convert.ToString(firstName[0]) + Convert.ToString(lastName[0]) + Convert.ToString(code.Next(10000, 99999));
 
@@ -185,6 +185,7 @@ public static class Program
     panel2.Border = BoxBorder.Rounded;
     panel2.Padding = new Padding(1, 1, 1, 1);
     AnsiConsole.Write(panel2);
+
 
     foreach (var item in ob.accounts)
     {
@@ -207,7 +208,10 @@ public static class Program
       LastName = lastName,
       DateOfBirth = birthDateOnly,
       Balance = balance,
-      CreationDate = creationDate
+      CreationDate = creationDate,
+      Transactions = new List<Transaction>()
+      
+      
     }).ToArray();
 
     //Nie zmienia .jsona w jedna linie yipiee!!!
@@ -226,7 +230,12 @@ public static class Program
       decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to deposit:");
       loggedInUser.Balance += amount;
 
+      loggedInUser.Transactions.Add(new Transaction {Type = "Deposit", Amount = amount, Date = DateTime.Now }); // Funckja dla transakcji
+      
+
       UpdateUserInJson(loggedInUser);
+
+      
 
       // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
       AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
@@ -241,8 +250,11 @@ public static class Program
       {
         loggedInUser.Balance -= amount;
 
+        loggedInUser.Transactions.Add(new Transaction { Type = "Withdraw", Amount = amount, Date = DateTime.Now }); // Funkcja Transakcji
+
         UpdateUserInJson(loggedInUser);
 
+        
         // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
         AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
       }
@@ -253,8 +265,12 @@ public static class Program
     }
   }
 
+
+
+
   public static void Transfer()
   {
+    
     if (loggedInUser != null)
     {
       string uid = AnsiConsole.Ask<string>("\nEnter the recipient's UID:");
@@ -264,6 +280,9 @@ public static class Program
         string jsonData = File.ReadAllText("users.json");
         AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
+
+
+                
         foreach (var item in ob.accounts)
         {
           if (item.Uid == uid)
@@ -271,14 +290,20 @@ public static class Program
             item.Balance += amount;
             loggedInUser.Balance -= amount;
 
+            loggedInUser.Transactions.Add(new Transaction { Type = "Transfer", Amount = amount, Date = DateTime.Now });
+
             UpdateUserInJson(loggedInUser);
             UpdateUserInJson(item);
 
+            
             break;
+            
           }
         }
-        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
-        AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+
+
+                // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
+                AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
       }
       else
       {
@@ -286,11 +311,29 @@ public static class Program
       }
     }
   }
+  
+  //Działa ale nie działa - niby jest ale się nie wyświetla :)
+  public static void TransHistory()
+{
+    if (loggedInUser != null)
+    {
+        AnsiConsole.WriteLine("\nTransaction History:");
+        foreach (var transaction in loggedInUser.Transactions)
+        {
+            AnsiConsole.WriteLine($"Type: {transaction.Type}, Amount: {transaction.Amount}, Date: {transaction.Date}");
+            
+        }
+        
+    }
+}
 
+
+  
   public static void UpdateUserInJson(AccountJSON updatedAccount)
   {
     string jsonData = File.ReadAllText("users.json");
     AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
+
 
     for (int i = 0; i < ob.accounts.Length; i++)
     {
@@ -300,6 +343,7 @@ public static class Program
         break;
       }
     }
+
 
     var options = new JsonSerializerOptions { WriteIndented = true };
     File.WriteAllText("users.json", JsonSerializer.Serialize(ob, options));
@@ -321,6 +365,13 @@ public static class Program
   }
 
 }
+// klasa pomocnicza do transakcji
+public class Transaction
+{
+    public required string Type { get; set; } // Dawało wartość null dlatego "required"
+    public decimal Amount { get; set; }
+    public DateTime Date { get; set; }
+}
 
 // Wczytanie tabeli Accounts z JSON
 public class AccountsJSON
@@ -331,10 +382,10 @@ public class AccountsJSON
 // Wczytanie pol uid i password z JSON
 public class AccountJSON
 {
+
+  public List<Transaction> Transactions { get; set; } = new List<Transaction>();
   public string Uid { get; set; } = string.Empty;
   public string Password { get; set; } = string.Empty;
-
-  //Nowe stringi z DateOfBirth będę bawił się poźniej
   public string FirstName { get; set; } = string.Empty;
   public string LastName { get; set; } = string.Empty;
 
@@ -342,5 +393,13 @@ public class AccountJSON
   public decimal Balance { get; set; }
   public DateTime CreationDate { get; set; }
 
-  public AccountJSON() { }
+  
+   //public AccountJSON(){}
 }
+
+
+//Lista rzeczy - Wyświetlać listę transakcji - bo póki co nie działa
+//Exception dla daty - wyrzuca błędów
+//Nie wyświetla wrong user id/ password tylko cię wyrzuca do logowania znowu, czemu nie wiem
+//Usunąlem usunięcia błędów póki co - mozna dodac na koniec bo trochę mieszają  te CS cośtam
+

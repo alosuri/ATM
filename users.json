@@ -1,6 +1,7 @@
 {
   "accounts": [
     {
+      "Transactions": [],
       "Uid": "123",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Jan",
@@ -10,6 +11,7 @@
       "CreationDate": "2024-05-22T18:57:12.5208528+02:00"
     },
     {
+      "Transactions": [],
       "Uid": "456",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Micha\u0142",
@@ -19,6 +21,7 @@
       "CreationDate": "2024-05-22T18:57:43.5292557+02:00"
     },
     {
+      "Transactions": [],
       "Uid": "AM23831",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Artur",
@@ -28,22 +31,61 @@
       "CreationDate": "2024-05-22T18:58:58.0856077+02:00"
     },
     {
+      "Transactions": [],
       "Uid": "WK96925",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Wiktoria",
       "LastName": "Krzak",
       "DateOfBirth": "05-12-1998",
-      "Balance": 3200,
+      "Balance": 3571,
       "CreationDate": "2024-05-22T18:59:57.2579173+02:00"
     },
     {
+      "Transactions": [
+        {
+          "Type": "Deposit",
+          "Amount": 1233,
+          "Date": "2024-05-29T00:05:52.5395426+02:00"
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 123,
+          "Date": "2024-05-29T00:16:14.661507+02:00"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 123,
+          "Date": "2024-05-29T00:16:25.9864563+02:00"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 123,
+          "Date": "2024-05-29T00:33:00.4036606+02:00"
+        }
+      ],
       "Uid": "SB39416",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Sandra",
       "LastName": "Bruk",
       "DateOfBirth": "19-08-2006",
-      "Balance": 50,
+      "Balance": 1737,
       "CreationDate": "2024-05-22T19:00:32.6708579+02:00"
+    },
+    {
+      "Transactions": [
+        {
+          "Type": "Deposit",
+          "Amount": 123,
+          "Date": "2024-05-29T00:34:42.8796307+02:00"
+        }
+      ],
+      "Uid": "MS13978",
+      "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "FirstName": "Miko\u0142aj",
+      "LastName": "Szymanowicz",
+      "DateOfBirth": "31-01-2003",
+      "Balance": 423,
+      "CreationDate": "2024-05-29T00:33:57.0470037+02:00"
     }
   ]
 }
