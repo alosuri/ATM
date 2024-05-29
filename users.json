@@ -1,23 +1,256 @@
 {
   "accounts": [
     {
-      "Transactions": [],
+      "Transactions": [
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T18:25:16.4948681+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 123,
+          "Date": "2024-05-29T18:25:18.8632233+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 100,
+          "Date": "2024-05-29T18:25:27.5134886+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 1000,
+          "Date": "2024-05-29T18:30:36.5250494+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Received",
+          "Amount": 123,
+          "Date": "2024-05-29T18:33:23.0571209+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        },
+        {
+          "Type": "Received",
+          "Amount": 123,
+          "Date": "2024-05-29T18:33:25.5795387+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T19:49:10.7295389+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T19:49:24.3710195+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T19:50:27.5551298+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T19:50:49.9740994+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T19:56:11.5422297+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T19:57:25.9240767+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T19:57:30.4239688+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 100,
+          "Date": "2024-05-29T19:57:39.8707786+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T20:07:31.7835855+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T20:08:01.7392006+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 100,
+          "Date": "2024-05-29T20:08:17.4657147+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T20:09:53.432913+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T20:09:56.7314661+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Received",
+          "Amount": 100,
+          "Date": "2024-05-29T20:10:58.5054911+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        }
+      ],
       "Uid": "123",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Jan",
       "LastName": "Kowalski",
       "DateOfBirth": "12-03-2001",
-      "Balance": 90,
+      "Balance": 1528,
       "CreationDate": "2024-05-22T18:57:12.5208528+02:00"
     },
     {
-      "Transactions": [],
+      "Transactions": [
+        {
+          "Type": "Received",
+          "Amount": 100,
+          "Date": "2024-05-29T18:25:27.5134857+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 1000,
+          "Date": "2024-05-29T18:33:12.5298906+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 20,
+          "Date": "2024-05-29T18:33:14.6935642+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 20,
+          "Date": "2024-05-29T18:33:16.2642355+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 20,
+          "Date": "2024-05-29T18:33:17.8371031+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 300,
+          "Date": "2024-05-29T18:33:19.6153127+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 123,
+          "Date": "2024-05-29T18:33:23.0571243+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 123,
+          "Date": "2024-05-29T18:33:25.5795415+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        },
+        {
+          "Type": "Received",
+          "Amount": 100,
+          "Date": "2024-05-29T19:57:39.8707757+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Received",
+          "Amount": 100,
+          "Date": "2024-05-29T20:08:17.4657114+02:00",
+          "RecipientTo": "456",
+          "RecipientFrom": "123"
+        },
+        {
+          "Type": "Deposit",
+          "Amount": 100,
+          "Date": "2024-05-29T20:10:49.0401914+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Withdraw",
+          "Amount": 100,
+          "Date": "2024-05-29T20:10:52.7441089+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 100,
+          "Date": "2024-05-29T20:10:58.5054931+02:00",
+          "RecipientTo": "123",
+          "RecipientFrom": "456"
+        }
+      ],
       "Uid": "456",
       "Password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
       "FirstName": "Micha\u0142",
       "LastName": "Kot",
       "DateOfBirth": "03-08-2005",
-      "Balance": 240,
+      "Balance": 1594,
       "CreationDate": "2024-05-22T18:57:43.5292557+02:00"
     },
     {
@@ -45,22 +278,30 @@
         {
           "Type": "Deposit",
           "Amount": 1233,
-          "Date": "2024-05-29T00:05:52.5395426+02:00"
+          "Date": "2024-05-29T00:05:52.5395426+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
         },
         {
           "Type": "Withdraw",
           "Amount": 123,
-          "Date": "2024-05-29T00:16:14.661507+02:00"
+          "Date": "2024-05-29T00:16:14.661507+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
         },
         {
           "Type": "Deposit",
           "Amount": 123,
-          "Date": "2024-05-29T00:16:25.9864563+02:00"
+          "Date": "2024-05-29T00:16:25.9864563+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
         },
         {
           "Type": "Deposit",
           "Amount": 123,
-          "Date": "2024-05-29T00:33:00.4036606+02:00"
+          "Date": "2024-05-29T00:33:00.4036606+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
         }
       ],
       "Uid": "SB39416",
@@ -76,7 +317,9 @@
         {
           "Type": "Deposit",
           "Amount": 123,
-          "Date": "2024-05-29T00:34:42.8796307+02:00"
+          "Date": "2024-05-29T00:34:42.8796307+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
         }
       ],
       "Uid": "MS13978",

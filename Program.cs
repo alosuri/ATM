@@ -4,8 +4,19 @@ using System.Text.Json;
 using System.Security.Cryptography;
 using System.Globalization;
 
+// Zrobione:
+// Dodałem tabelkę z historią transakcji - Rafał
+// Naprawa systemu logowania (Pokazuje, że hasło lub login jest zły) - Rafał
+// Proceed/Resign przy wpłacie/wypłacie/przelewach - Rafał 
+// Wyjście z aplikacji w menu głównym - Rafał
 
-// ShowAccountsDetails - Przenioslem te funkcje do ShowLoggedInMenu. - Rafał
+// Do zrobienia:
+// TODO: Exception na datę.
+// TODO: Informacje o projekcie.
+// TODO: Przy przelewach dać info, że konto o podanym UID nie instnieje.
+// TODO: Potwierdzenie czy na pewno chcesz stworzyć konto.
+// TODO: Ten błąd z ob. Ale to można go nie wyświetlać po prostu chyba.
+// TODO: A dalej nie wiem.
 
 public static class Program
 {
@@ -15,7 +26,7 @@ public static class Program
     while (true)
     {
       if (loggedInUser == null)
-      { 
+      {
         Console.Clear();
         ShowMainMenu();
       }
@@ -36,13 +47,14 @@ public static class Program
     var options = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
             .Title("\nWhat would you like to do?")
-            .PageSize(3)
+            .PageSize(4)
             .MoreChoicesText("[grey](Move up and down to choose an option.)[/]")
             .AddChoices(new[]
             {
                     "Log in to account",
                     "Create new account",
                     "Information about project",
+          "Exit"
             }));
     switch (options)
     {
@@ -57,12 +69,15 @@ public static class Program
       case "Information about project":
         AnsiConsole.WriteLine("");
         break;
+      case "Exit":
+        Console.Clear();
+        System.Environment.Exit(1);
+        break;
     }
   }
   public static void ShowLoggedInMenu()
   {
     Console.Clear();
-
 
     var panel = new Panel($"[springgreen3_1]Name:[/] {loggedInUser?.FirstName + ' ' + loggedInUser?.LastName}\n[springgreen2]UID:[/] {loggedInUser?.Uid}\n[cyan3]Birth date:[/] {loggedInUser?.DateOfBirth}\n[darkturquoise]Account created on:[/] {loggedInUser?.CreationDate}\n\n[turquoise2]Account balance:[/] {loggedInUser?.Balance} ZŁ");
     panel.Header = new PanelHeader("[green3_1] Account details [/]");
@@ -123,30 +138,35 @@ public static class Program
       if (item.Uid == uid && item.Password == password)
       {
         AnsiConsole.WriteLine("Logged in!");
-
-
         loggedInUser = item;
-        
-        
         return;
-
       }
-       
-
     }
 
-    Console.WriteLine("Password or UID are incorrect.");
-    
+    var options = AnsiConsole.Prompt(
+      new SelectionPrompt<string>()
+        .Title("\n[red]Password or UID are incorrect.[/]")
+        .PageSize(3)
+        .MoreChoicesText("[grey](Choose one of options.)[/]")
+        .AddChoices(new[] {
+        "Retry",
+        "Back"
+        }));
+
+    switch (options)
+    {
+      case "Retry":
+        Console.Clear();
+        Login();
+        break;
+      case "Back":
+        Console.Clear();
+        ShowMainMenu();
+        break;
+    }
     return;
-    
   }
-    
-    
-    // Zamiast return mozemy tutaj dac zapetlenie sie funkcji login, zeby mozna powtorzyc logowanie.
-    //Mozemy dodaj do to do list
 
-
-  
   public static void LogOut()
   {
     if (loggedInUser != null)
@@ -154,16 +174,14 @@ public static class Program
       Console.Clear();
       AnsiConsole.WriteLine($"User {loggedInUser.Uid} logged out.");
       loggedInUser = null;
-        Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
-
+      Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
     }
     else
     {
-      AnsiConsole.WriteLine("No user is currently logged in.");
+      AnsiConsole.WriteLine("No user is currently logged in. Press any key to continue...");
       Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
-
     }
-  } 
+  }
   public static void CreateAccount()
   {
     string jsonData = File.ReadAllText("users.json");
@@ -224,8 +242,8 @@ public static class Program
       Balance = balance,
       CreationDate = creationDate,
       Transactions = new List<Transaction>()
-      
-      
+
+
     }).ToArray();
 
     //Nie zmienia .jsona w jedna linie yipiee!!!
@@ -242,20 +260,41 @@ public static class Program
     if (loggedInUser != null)
     {
       decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to deposit:");
-      loggedInUser.Balance += amount;
+      var options = AnsiConsole.Prompt(
+      new SelectionPrompt<string>()
+        .Title("\n[green]Are you sure?[/]")
+        .PageSize(3)
+        .MoreChoicesText("[grey](Choose one of options.)[/]")
+        .AddChoices(new[] {
+        "Proceed",
+        "Resign"
+        }));
 
-      loggedInUser.Transactions.Add(new Transaction {Type = "Deposit", Amount = amount, Date = DateTime.Now }); // Funckja dla transakcji
-      
+      switch (options)
+      {
+        case "Proceed":
+          loggedInUser.Balance += amount;
 
-      UpdateUserInJson(loggedInUser);
+          loggedInUser.Transactions.Add(new Transaction { Type = "Deposit", Amount = amount, Date = DateTime.Now }); // Funckja dla transakcji
 
-      
 
-      // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
-      AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
-      Console.ReadKey();
-      AnsiConsole.WriteLine("Press any button to return to main menu");
-      
+          UpdateUserInJson(loggedInUser);
+
+
+
+          // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
+          AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+          Console.ReadKey();
+          AnsiConsole.WriteLine("Press any button to return to main menu");
+          break;
+        case "Resign":
+          Console.Clear();
+          ShowLoggedInMenu();
+          break;
+      }
+
+
+
     }
   }
   public static void Withdraw()
@@ -263,26 +302,47 @@ public static class Program
     if (loggedInUser != null)
     {
       decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to withdraw:");
-      if (amount <= loggedInUser.Balance)
+      var options = AnsiConsole.Prompt(
+    new SelectionPrompt<string>()
+      .Title("\n[green]Are you sure?[/]")
+      .PageSize(3)
+      .MoreChoicesText("[grey](Choose one of options.)[/]")
+      .AddChoices(new[] {
+        "Proceed",
+        "Resign"
+      }));
+
+      switch (options)
       {
-        loggedInUser.Balance -= amount;
+        case "Proceed":
+          if (amount <= loggedInUser.Balance)
+          {
+            loggedInUser.Balance -= amount;
 
-        loggedInUser.Transactions.Add(new Transaction { Type = "Withdraw", Amount = amount, Date = DateTime.Now }); // Funkcja Transakcji
+            loggedInUser.Transactions.Add(new Transaction { Type = "Withdraw", Amount = amount, Date = DateTime.Now }); // Funkcja Transakcji
 
-        UpdateUserInJson(loggedInUser);
+            UpdateUserInJson(loggedInUser);
 
-        
-        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍 - naprawione 2 linie nizej
-        AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
-        Console.ReadKey();// rozwiazuje problem
-        AnsiConsole.WriteLine("Press any button to return to main menu");
+
+            // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍 - naprawione 2 linie nizej
+            AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+            Console.ReadKey();// rozwiazuje problem
+            AnsiConsole.WriteLine("Press any button to return to main menu");
+          }
+          else
+          {
+            AnsiConsole.WriteLine("Insufficient funds.");
+            Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
+            AnsiConsole.WriteLine("Press any button to return to main menu");
+          }
+
+          break;
+        case "Resign":
+          Console.Clear();
+          ShowLoggedInMenu();
+          break;
       }
-      else
-      {
-        AnsiConsole.WriteLine("Insufficient funds.");
-        Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
-        AnsiConsole.WriteLine("Press any button to return to main menu");
-      }
+
     }
   }
 
@@ -291,67 +351,127 @@ public static class Program
 
   public static void Transfer()
   {
-    
+
     if (loggedInUser != null)
     {
       string uid = AnsiConsole.Ask<string>("\nEnter the recipient's UID:");
       decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to transfer:");
-      if (amount <= loggedInUser.Balance)
+      var options = AnsiConsole.Prompt(
+      new SelectionPrompt<string>()
+        .Title("\n[green]Are you sure?[/]")
+        .PageSize(3)
+        .MoreChoicesText("[grey](Choose one of options.)[/]")
+        .AddChoices(new[] {
+        "Proceed",
+        "Resign"
+        }));
+
+      switch (options)
       {
-        string jsonData = File.ReadAllText("users.json");
-        AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
-
-
-
-                
-        foreach (var item in ob.accounts)
-        {
-          if (item.Uid == uid)
+        case "Proceed":
+          if (amount <= loggedInUser.Balance)
           {
-            item.Balance += amount;
-            loggedInUser.Balance -= amount;
+            string jsonData = File.ReadAllText("users.json");
+            AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
-            loggedInUser.Transactions.Add(new Transaction { Type = "Transfer", Amount = amount, Date = DateTime.Now });
+            foreach (var item in ob.accounts)
+            {
+              if (item.Uid == uid)
+              {
+                item.Balance += amount;
+                loggedInUser.Balance -= amount;
 
-            UpdateUserInJson(loggedInUser);
-            UpdateUserInJson(item);
+                item.Transactions.Add(new Transaction { RecipientFrom = loggedInUser.Uid, RecipientTo = item.Uid, Type = "Received", Amount = amount, Date = DateTime.Now });
+                loggedInUser.Transactions.Add(new Transaction { RecipientFrom = loggedInUser.Uid, RecipientTo = item.Uid, Type = "Transfer", Amount = amount, Date = DateTime.Now });
 
-            
-            break;
-            
+                UpdateUserInJson(loggedInUser);
+                UpdateUserInJson(item);
+
+
+                break;
+
+              }
+            }
+
+            // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
+            AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+            Console.ReadKey();
+            AnsiConsole.WriteLine("Press any button to return to main menu");
           }
-        }
+          else
+          {
+            AnsiConsole.WriteLine("Insufficient funds.");
+          }
+          break;
+        case "Resign":
+          Console.Clear();
+          ShowLoggedInMenu();
+          break;
+      }
 
-                // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
-                AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
-                Console.ReadKey();
-                AnsiConsole.WriteLine("Press any button to return to main menu");
-      }
-      else
-      {
-        AnsiConsole.WriteLine("Insufficient funds.");
-      }
     }
   }
-  
-  
+
+
   public static void TransHistory()
-{
+  {
     if (loggedInUser != null)
     {
-        AnsiConsole.WriteLine("\nTransaction History:");
-        foreach (var transaction in loggedInUser.Transactions)
+      Console.Clear();
+      AnsiConsole.WriteLine("\nTransaction History:");
+
+
+      if (loggedInUser.Transactions.Count > 0)
+      {
+        var table = new Table();
+        table.Border(TableBorder.Rounded);
+        AnsiConsole.Live(table)
+        .Start(ctx =>
         {
-            AnsiConsole.WriteLine($"Type: {transaction.Type}, Amount: {transaction.Amount}, Date: {transaction.Date}");
-            
-        }
-        Console.ReadKey(); // rozwiazuje problem z wyswietlaniem historii transakcji
-        AnsiConsole.WriteLine("Press any button to return to main menu");
+          table.AddColumn(new TableColumn("From/To"));
+          ctx.Refresh();
+          Thread.Sleep(50);
+          table.AddColumn(new TableColumn("Type"));
+          ctx.Refresh();
+          Thread.Sleep(50);
+          table.AddColumn(new TableColumn("Amount"));
+          ctx.Refresh();
+          Thread.Sleep(50);
+          table.AddColumn(new TableColumn("Date"));
+          ctx.Refresh();
+          Thread.Sleep(50);
+
+          foreach (var transaction in loggedInUser.Transactions)
+          {
+            if (transaction.Type == "Transfer") table.AddRow($"[red]{transaction.RecipientTo} > {transaction.RecipientFrom}[/]", $"[red]{transaction.Type}[/]", $"[red]{transaction.Amount} PLN[/]", $"[red]{transaction.Date}[/]");
+
+            else if (transaction.Type == "Withdraw") table.AddRow($"[red]-[/]", $"[red]{transaction.Type}[/]", $"[red]{transaction.Amount} PLN[/]", $"[red]{transaction.Date}[/]");
+
+            else if (transaction.Type == "Deposit") table.AddRow($"[green]-[/]", $"[green]{transaction.Type}[/]", $"[green]{transaction.Amount} PLN[/]", $"[green]{transaction.Date}[/]");
+
+            else if (transaction.Type == "Received") table.AddRow($"[green]{transaction.RecipientTo} > {transaction.RecipientFrom}[/]", $"[green]{transaction.Type}[/]", $"[green]{transaction.Amount} PLN[/]", $"[green]{transaction.Date}[/]");
+
+            ctx.Refresh();
+            Thread.Sleep(50);
+          }
+
+        });
+
+      }
+
+      else
+      {
+        AnsiConsole.Markup("[gray]No data.[/]\n");
+      }
+
+      AnsiConsole.WriteLine("Press any button to return to main menu");
+      Console.ReadKey(); // rozwiazuje problem z wyswietlaniem historii transakcji
+
     }
-}
+  }
 
 
-  
+
   public static void UpdateUserInJson(AccountJSON updatedAccount)
   {
     string jsonData = File.ReadAllText("users.json");
@@ -391,9 +511,11 @@ public static class Program
 // klasa pomocnicza do transakcji
 public class Transaction
 {
-    public required string Type { get; set; } // Dawało wartość null dlatego "required"
-    public decimal Amount { get; set; }
-    public DateTime Date { get; set; }
+  public required string Type { get; set; } // Dawało wartość null dlatego "required"
+  public decimal Amount { get; set; }
+  public DateTime Date { get; set; }
+  public string RecipientTo { get; set; } = string.Empty;
+  public string RecipientFrom { get; set; } = string.Empty;
 }
 
 // Wczytanie tabeli Accounts z JSON
@@ -416,8 +538,8 @@ public class AccountJSON
   public decimal Balance { get; set; }
   public DateTime CreationDate { get; set; }
 
-  
-   //public AccountJSON(){}
+
+  //public AccountJSON(){}
 }
 
 
@@ -425,4 +547,3 @@ public class AccountJSON
 //Exception dla daty - wyrzuca błędów
 //Nie wyświetla wrong user id/ password tylko cię wyrzuca do logowania znowu, czemu nie wiem
 //Usunąlem usunięcia błędów póki co - mozna dodac na koniec bo trochę mieszają  te CS cośtam
-
