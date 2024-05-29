@@ -123,18 +123,28 @@ public static class Program
       if (item.Uid == uid && item.Password == password)
       {
         AnsiConsole.WriteLine("Logged in!");
+
+
         loggedInUser = item;
+        
+        
         return;
 
       }
+       
+
     }
 
-
     Console.WriteLine("Password or UID are incorrect.");
-
-    // Zamiast return mozemy tutaj dac zapetlenie sie funkcji login, zeby mozna powtorzyc logowanie.
+    
     return;
+    
   }
+    
+    
+    // Zamiast return mozemy tutaj dac zapetlenie sie funkcji login, zeby mozna powtorzyc logowanie.
+    //Mozemy dodaj do to do list
+
 
   
   public static void LogOut()
@@ -144,10 +154,14 @@ public static class Program
       Console.Clear();
       AnsiConsole.WriteLine($"User {loggedInUser.Uid} logged out.");
       loggedInUser = null;
+        Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
+
     }
     else
     {
       AnsiConsole.WriteLine("No user is currently logged in.");
+      Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
+
     }
   } 
   public static void CreateAccount()
@@ -239,6 +253,9 @@ public static class Program
 
       // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
       AnsiConsole.WriteLine($"Deposit of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+      Console.ReadKey();
+      AnsiConsole.WriteLine("Press any button to return to main menu");
+      
     }
   }
   public static void Withdraw()
@@ -255,12 +272,16 @@ public static class Program
         UpdateUserInJson(loggedInUser);
 
         
-        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
+        // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍 - naprawione 2 linie nizej
         AnsiConsole.WriteLine($"Withdrawal of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+        Console.ReadKey();// rozwiazuje problem
+        AnsiConsole.WriteLine("Press any button to return to main menu");
       }
       else
       {
         AnsiConsole.WriteLine("Insufficient funds.");
+        Console.ReadKey();// rozwiazuje problem braku informacji - kazdy console read key zaaplikowany ma taka sama funkcje - nulyfikuje problem z C.Clear()
+        AnsiConsole.WriteLine("Press any button to return to main menu");
       }
     }
   }
@@ -301,9 +322,10 @@ public static class Program
           }
         }
 
-
                 // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
                 AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+                Console.ReadKey();
+                AnsiConsole.WriteLine("Press any button to return to main menu");
       }
       else
       {
@@ -312,7 +334,7 @@ public static class Program
     }
   }
   
-  //Działa ale nie działa - niby jest ale się nie wyświetla :)
+  
   public static void TransHistory()
 {
     if (loggedInUser != null)
@@ -323,7 +345,8 @@ public static class Program
             AnsiConsole.WriteLine($"Type: {transaction.Type}, Amount: {transaction.Amount}, Date: {transaction.Date}");
             
         }
-        
+        Console.ReadKey(); // rozwiazuje problem z wyswietlaniem historii transakcji
+        AnsiConsole.WriteLine("Press any button to return to main menu");
     }
 }
 
