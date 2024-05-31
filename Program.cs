@@ -3,20 +3,24 @@ using System.Text;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 // Zrobione:
 // Dodałem tabelkę z historią transakcji - Rafał
 // Naprawa systemu logowania (Pokazuje, że hasło lub login jest zły) - Rafał
 // Proceed/Resign przy wpłacie/wypłacie/przelewach - Rafał 
 // Wyjście z aplikacji w menu głównym - Rafał
+// W TS From/To wyświetla teraz użytkowników w dobrej kolejnosci - Mikołaj
+// Exception na datę postawione w pętli. - Mikołaj
+// Transfery nie przechodzą jeśli UID nie istnieje, wyświetla wiadomość i daje użytkownikowi opcje aby zrezygnować albo kontynouwać (użyłem funkcji z loginu) - Mikołaj
 
 // Do zrobienia:
-// TODO: Exception na datę.
 // TODO: Informacje o projekcie.
-// TODO: Przy przelewach dać info, że konto o podanym UID nie instnieje.
 // TODO: Potwierdzenie czy na pewno chcesz stworzyć konto.
-// TODO: Ten błąd z ob. Ale to można go nie wyświetlać po prostu chyba.
-// TODO: A dalej nie wiem.
+// TODO: BUG - możesz sobie sam wysłać pieniądze transferem
+// TODO: Ten błąd z ob. Ale to można go nie wyświetlać po prostu chyba. // Błąd z ob na sam koniec zróbmy bo mogę po prostu wygenerować blokowanie z VS ale dużo tego doda (wiec na ostatni commit idealnie) (MIkołaj)
+// TODO: Wydaje mi się że niektóre kolorki znikneły ( Mikołaj)
+
 
 public static class Program
 {
@@ -197,9 +201,24 @@ public static class Program
     var firstName = AnsiConsole.Ask<string>("Enter [green]first name[/]:");
     var lastName = AnsiConsole.Ask<string>("Enter [green]last name[/]:");
 
-    //naming sucks ;)
-    var birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-mm-yyyy):");
-    var birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+    string birthDateString;
+    DateTime birthDate;
+  do
+  {
+    try
+    {
+        birthDateString = AnsiConsole.Ask<string>("Enter [green]birth date[/] (format: dd-MM-yyyy):");
+        birthDate = DateTime.ParseExact(birthDateString, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+        break;
+    }
+    catch (FormatException)
+      {
+        AnsiConsole.Write("Invalid date format.\nPress any button to try again\n");
+        Console.ReadKey();
+      }
+    } 
+      while (true);
+
     string birthDateOnly = birthDate.ToString("dd-MM-yyyy");
 
     var balance = AnsiConsole.Ask<decimal>("Enter [green]initial balance[/]:");
@@ -354,6 +373,7 @@ public static class Program
 
     if (loggedInUser != null)
     {
+
       string uid = AnsiConsole.Ask<string>("\nEnter the recipient's UID:");
       decimal amount = AnsiConsole.Ask<decimal>("\nEnter amount to transfer:");
       var options = AnsiConsole.Prompt(
@@ -373,7 +393,7 @@ public static class Program
           {
             string jsonData = File.ReadAllText("users.json");
             AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
-
+            
             foreach (var item in ob.accounts)
             {
               if (item.Uid == uid)
@@ -387,32 +407,58 @@ public static class Program
                 UpdateUserInJson(loggedInUser);
                 UpdateUserInJson(item);
 
-
-                break;
-
+                AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
+                Console.ReadKey();
+                AnsiConsole.WriteLine("Press any button to return to main menu");
+                
+                ShowLoggedInMenu();
               }
             }
+          
+                
+                var IncorrectUid = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .Title("\n[red] This UID doesnt exist, please try again.[/]")
+                .PageSize(3)
+                .MoreChoicesText("[grey](Choose one of options.)[/]")
+                .AddChoices(new[] {
+                "Retry",
+                "Back"
+                }));
 
-            // To się chyba nie wyświetla przez Console.Clear(), ale zmęczony jestem, więc zrobię to później 👍👍👍👍
-            AnsiConsole.WriteLine($"Transfer of {amount} PLN successful. Current balance: {loggedInUser.Balance} PLN");
-            Console.ReadKey();
-            AnsiConsole.WriteLine("Press any button to return to main menu");
-          }
+                  switch (IncorrectUid)
+                {
+                    case "Retry":
+                    // usunąłem console clear btw.
+                    Transfer();
+                    break;
+
+                    case "Back":
+                    Console.Clear();
+                    ShowLoggedInMenu();
+                    break;
+                }
+              }     
+          
+
           else
-          {
-            AnsiConsole.WriteLine("Insufficient funds.");
-          }
+            {
+              AnsiConsole.WriteLine("Insufficient funds.");
+            }
           break;
+        
         case "Resign":
           Console.Clear();
           ShowLoggedInMenu();
           break;
       }
-
     }
   }
+  
 
+ 
 
+// Historia transakcji + tabela
   public static void TransHistory()
   {
     if (loggedInUser != null)
@@ -441,15 +487,15 @@ public static class Program
           ctx.Refresh();
           Thread.Sleep(50);
 
-          foreach (var transaction in loggedInUser.Transactions)
+          foreach (var transaction in loggedInUser.Transactions) // Zamieniłem Recipient From/To bo było odwrócone
           {
-            if (transaction.Type == "Transfer") table.AddRow($"[red]{transaction.RecipientTo} > {transaction.RecipientFrom}[/]", $"[red]{transaction.Type}[/]", $"[red]{transaction.Amount} PLN[/]", $"[red]{transaction.Date}[/]");
+            if (transaction.Type == "Transfer") table.AddRow($"[red]{transaction.RecipientFrom} > {transaction.RecipientTo}[/]", $"[red]{transaction.Type}[/]", $"[red]{transaction.Amount} PLN[/]", $"[red]{transaction.Date}[/]");
 
             else if (transaction.Type == "Withdraw") table.AddRow($"[red]-[/]", $"[red]{transaction.Type}[/]", $"[red]{transaction.Amount} PLN[/]", $"[red]{transaction.Date}[/]");
 
             else if (transaction.Type == "Deposit") table.AddRow($"[green]-[/]", $"[green]{transaction.Type}[/]", $"[green]{transaction.Amount} PLN[/]", $"[green]{transaction.Date}[/]");
 
-            else if (transaction.Type == "Received") table.AddRow($"[green]{transaction.RecipientTo} > {transaction.RecipientFrom}[/]", $"[green]{transaction.Type}[/]", $"[green]{transaction.Amount} PLN[/]", $"[green]{transaction.Date}[/]");
+            else if (transaction.Type == "Received") table.AddRow($"[green]{transaction.RecipientFrom} > {transaction.RecipientTo}[/]", $"[green]{transaction.Type}[/]", $"[green]{transaction.Amount} PLN[/]", $"[green]{transaction.Date}[/]");
 
             ctx.Refresh();
             Thread.Sleep(50);
@@ -471,7 +517,7 @@ public static class Program
   }
 
 
-
+//Update pliku .json
   public static void UpdateUserInJson(AccountJSON updatedAccount)
   {
     string jsonData = File.ReadAllText("users.json");
@@ -539,11 +585,8 @@ public class AccountJSON
   public DateTime CreationDate { get; set; }
 
 
-  //public AccountJSON(){}
+
 }
 
 
-//Lista rzeczy - Wyświetlać listę transakcji - bo póki co nie działa
-//Exception dla daty - wyrzuca błędów
-//Nie wyświetla wrong user id/ password tylko cię wyrzuca do logowania znowu, czemu nie wiem
-//Usunąlem usunięcia błędów póki co - mozna dodac na koniec bo trochę mieszają  te CS cośtam
+
