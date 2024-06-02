@@ -320,6 +320,13 @@
           "Date": "2024-05-29T00:34:42.8796307+02:00",
           "RecipientTo": "",
           "RecipientFrom": ""
+        },
+        {
+          "Type": "Received",
+          "Amount": 100,
+          "Date": "2024-05-30T20:10:12.9071188+02:00",
+          "RecipientTo": "MS13978",
+          "RecipientFrom": "mk95074"
         }
       ],
       "Uid": "MS13978",
@@ -327,8 +334,33 @@
       "FirstName": "Miko\u0142aj",
       "LastName": "Szymanowicz",
       "DateOfBirth": "31-01-2003",
-      "Balance": 423,
+      "Balance": 523,
       "CreationDate": "2024-05-29T00:33:57.0470037+02:00"
+    },
+    {
+      "Transactions": [
+        {
+          "Type": "Deposit",
+          "Amount": 2137,
+          "Date": "2024-05-30T20:09:18.2201229+02:00",
+          "RecipientTo": "",
+          "RecipientFrom": ""
+        },
+        {
+          "Type": "Transfer",
+          "Amount": 100,
+          "Date": "2024-05-30T20:10:12.9071225+02:00",
+          "RecipientTo": "MS13978",
+          "RecipientFrom": "mk95074"
+        }
+      ],
+      "Uid": "mk95074",
+      "Password": "abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab",
+      "FirstName": "mateusz",
+      "LastName": "kowaluk",
+      "DateOfBirth": "26-12-2000",
+      "Balance": 2037,
+      "CreationDate": "2024-05-30T20:07:36.9559487+02:00"
     }
   ]
 }

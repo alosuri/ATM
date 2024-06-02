@@ -43,7 +43,7 @@ public static class Program
   }
   public static void ShowMainMenu()
   {
-    var panel = new Panel("Tutaj trzeba dac jakis tekst na powitanie, ale na chwile obecna nie mam pomyslu.");
+    var panel = new Panel("Welcome to the banking app. Log in to the transaction service or create a new account.");
     panel.Border = BoxBorder.Rounded;
     panel.Padding = new Padding(1, 1, 1, 1);
     AnsiConsole.Write(panel);
@@ -71,7 +71,8 @@ public static class Program
         CreateAccount();
         break;
       case "Information about project":
-        AnsiConsole.WriteLine("");
+        Console.Clear();
+        ShowProjectInfo();
         break;
       case "Exit":
         Console.Clear();
@@ -79,6 +80,19 @@ public static class Program
         break;
     }
   }
+ public static void ShowProjectInfo()
+{
+    var panel = new Panel("The aim of the project is to create a simple banking application that allows users to create bank accounts, log in to their accounts, check their balance, check history of transactions, and perform basic financial operations such as deposits and withdrawals,transactions.\n\nCreated by: [cyan1]Rafal Suchorski, Mikolaj Szymanowicz, Oliwia Szaforz[/]");
+    panel.Border = BoxBorder.Rounded;
+    panel.Padding = new Padding(1, 1, 1, 1);
+    AnsiConsole.Write(panel);
+
+    AnsiConsole.WriteLine("\nPress any key to return to the main menu.");
+    Console.ReadKey();
+    Console.Clear();
+    ShowMainMenu(); 
+}
+
   public static void ShowLoggedInMenu()
   {
     Console.Clear();

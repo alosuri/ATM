@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj": {}
+    "C:\\Users\\FUJITSU\\Documents\\GitHub\\ATM\\ATM.csproj": {}
   },
   "projects": {
-    "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj": {
+    "C:\\Users\\FUJITSU\\Documents\\GitHub\\ATM\\ATM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj",
+        "projectUniqueName": "C:\\Users\\FUJITSU\\Documents\\GitHub\\ATM\\ATM.csproj",
         "projectName": "ATM",
-        "projectPath": "/home/alosuri/Documents/Programming/C#/ATM/ATM.csproj",
-        "packagesPath": "/home/alosuri/.nuget/packages/",
-        "outputPath": "/home/alosuri/Documents/Programming/C#/ATM/obj/",
+        "projectPath": "C:\\Users\\FUJITSU\\Documents\\GitHub\\ATM\\ATM.csproj",
+        "packagesPath": "C:\\Users\\FUJITSU\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\FUJITSU\\Documents\\GitHub\\ATM\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/alosuri/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\FUJITSU\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -63,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/8.0.104/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
