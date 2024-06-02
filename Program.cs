@@ -18,10 +18,7 @@ using System.Globalization;
 // BUG - możesz sobie sam wysłać pieniądze transferem - Rafał
 
 // Wydaje mi się że niektóre kolorki znikneły ( Mikołaj) - U mnie działa 👍👍👍👍👍 - Rafał
-
-// Do zrobienia:
-// TODO: Ten błąd z ob. Ale to można go nie wyświetlać po prostu chyba. // Błąd z ob na sam koniec zróbmy bo mogę po prostu wygenerować blokowanie z VS ale dużo tego doda (wiec na ostatni commit idealnie) (MIkołaj)
-
+// ob zatrzymane z #pragma warning restore CS8602
 
 public static class Program
 {
@@ -152,6 +149,7 @@ public static class Program
     AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
     foreach (var item in ob.accounts)
     {
       if (item.Uid == uid && item.Password == password)
@@ -161,6 +159,7 @@ public static class Program
         return;
       }
     }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
     var options = AnsiConsole.Prompt(
       new SelectionPrompt<string>()
@@ -258,6 +257,7 @@ public static class Program
     {
       case "Proceed":
 		// Dodajemy nowe konto do listy, 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		ob.accounts = ob.accounts.Append(new AccountJSON
 		{
 		  Uid = uid,
@@ -271,6 +271,7 @@ public static class Program
 
 
 		}).ToArray();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 		//Nie zmienia .jsona w jedna linie yipiee!!!
 		var options = new JsonSerializerOptions
@@ -295,6 +296,7 @@ public static class Program
     AnsiConsole.Write(panel2);
 
 	
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
     foreach (var item in ob.accounts)
     {
       if (item.Uid == uid)
@@ -302,6 +304,7 @@ public static class Program
         uid = Convert.ToString(firstName[0]) + Convert.ToString(lastName[0]) + Convert.ToString(code.Next(10000, 99999));
       }
     }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 
     AnsiConsole.WriteLine("\nPress enter to continue.");
@@ -428,6 +431,7 @@ public static class Program
             string jsonData = File.ReadAllText("users.json");
             AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
             
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             foreach (var item in ob.accounts)
             {
               if (item.Uid == uid && item.Uid != loggedInUser.Uid)
@@ -450,6 +454,7 @@ public static class Program
 				return;
               }
             }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
           
                 
                 var IncorrectUid = AnsiConsole.Prompt(
@@ -582,6 +587,7 @@ public static class Program
     AccountsJSON? ob = JsonSerializer.Deserialize<AccountsJSON>(jsonData);
 
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
     for (int i = 0; i < ob.accounts.Length; i++)
     {
       if (ob.accounts[i].Uid == updatedAccount.Uid)
@@ -590,6 +596,7 @@ public static class Program
         break;
       }
     }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 
     var options = new JsonSerializerOptions { WriteIndented = true };
